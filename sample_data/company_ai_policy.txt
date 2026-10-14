@@ -1,0 +1,23 @@
+ACME BANK — INTERNAL AI USE POLICY — SYNTHETIC PORTFOLIO DATA
+
+1. Human oversight
+Any AI-assisted recommendation that could materially affect a customer's access to credit,
+insurance, employment, or another high-impact service must be reviewed and approved by an
+authorized human before action is taken.
+
+2. Confidential data
+Customer financial data, authentication secrets, and internal investigation material must not
+be sent to unapproved public AI endpoints.
+
+3. Logging
+Production AI systems must record the requesting user, timestamp, retrieved source identifiers,
+model identifier, final output status, and human approval event where applicable. Audit records
+are retained for 365 days unless another approved policy requires a longer period.
+
+4. Grounded answers
+Internal document assistants must provide source references for factual answers. If retrieved
+evidence is insufficient, the assistant must abstain rather than fabricate an answer.
+
+5. Security testing
+RAG systems must be tested for prompt injection, indirect prompt injection, cross-tenant data
+exposure, poisoned documents, invalid citations, and unauthorized tool use.

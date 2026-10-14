@@ -1,0 +1,5 @@
+[
+  {"question":"How long are production AI audit records retained?","expected_keyword":"365","expected_source":"company_ai_policy.txt","expect_abstention":false},
+  {"question":"When is human approval required?","expected_keyword":"human","expected_source":"company_ai_policy.txt","expect_abstention":false},
+  {"question":"What was ACME Bank's lunar mining revenue in 2044?","expected_keyword":"Insufficient evidence","expected_source":null,"expect_abstention":true}
+]
