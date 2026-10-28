@@ -1,115 +1,39 @@
-# Secure Regulated RAG PRO
+# Secure Regulated RAG
 
-Production-oriented reference implementation for **Applied AI + RAG + security + regulated industries**.
+A multi-tenant document question-answering reference application using retrieval-augmented generation (RAG), source citations, and access controls.
 
-## What it proves
+## Key features
 
-- FastAPI API engineering
-- async SQLAlchemy
-- PostgreSQL + pgvector
-- HNSW vector search
-- PostgreSQL full-text search
-- hybrid retrieval with Reciprocal Rank Fusion
-- local Ollama embeddings + generation
-- deterministic citation validation
-- abstention on weak evidence
-- JWT + Argon2 authentication
-- tenant filtering + PostgreSQL RLS
-- audit logging with hashed questions
-- Prometheus metrics
-- optional OpenTelemetry tracing
-- Alembic migrations
-- tests + CI
-- evaluation harness
+- FastAPI, PostgreSQL/pgvector, and hybrid retrieval
+- Local Ollama embeddings and response generation
+- Citation validation and abstention when evidence is insufficient
+- Authentication, tenant filtering, PostgreSQL row-level security, and audit logging
+- Automated tests and evaluation tools
 
-## Architecture
+## Quick start
 
-```text
-Documents
-  -> parse
-  -> chunk
-  -> embeddings
-  -> PostgreSQL/pgvector
-
-Question
-  -> authentication
-  -> tenant isolation
-  -> vector search + lexical search
-  -> RRF fusion
-  -> LLM over selected evidence
-  -> deterministic citation validation
-  -> answer / abstention
-  -> audit + metrics
-```
-
-## Run
+Requires Docker Compose and Ollama. Set strong local credentials and secrets in `.env`.
 
 ```bash
 cp .env.example .env
-openssl rand -hex 32
-nano .env
-
+# Edit .env before starting
 ollama pull qwen3.5:4b
 ollama pull embeddinggemma
-
 docker compose up --build
 ```
 
-Open:
+API documentation: http://localhost:8000/docs
 
-```text
-http://localhost:8000/docs
-```
-
-Then:
-
-1. Login through `POST /auth/token`.
-2. Upload `sample_data/company_ai_policy.txt` through `POST /documents`.
-3. Ask: `How long are production AI audit records retained?`
-4. Expected answer: 365 days with a verified source.
-5. Ask an unanswerable question and verify abstention.
-
-## Security model
-
-The LLM is never the authorization boundary.
-
-Tenant isolation exists at two levels:
-
-```text
-application query filters
-+
-PostgreSQL Row-Level Security
-```
-
-Retrieved content is treated as untrusted data. The system does not claim to eliminate prompt injection; it applies defense in depth and is designed to be tested with the companion red-team harness.
-
-## Evaluation
-
-```bash
-export RAG_USERNAME=admin
-export RAG_PASSWORD='YOUR_PASSWORD'
-python eval/run_eval.py
-```
-
-The starter evaluation checks known answers, source correctness, citation validity, and abstention.
+Authenticate using `POST /auth/token`, upload a sample document through `POST /documents`, and test whether answers cite the retrieved sources.
 
 ## Tests
 
 ```bash
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -e ".[dev]"
 pytest -q
 ruff check .
 ```
 
-## Interview story
-
-> I built a multi-tenant regulated-document RAG platform using FastAPI, async SQLAlchemy, PostgreSQL and pgvector. I implemented hybrid lexical/vector retrieval with Reciprocal Rank Fusion, HNSW indexing, deterministic citation validation, explicit abstention, Argon2/JWT authentication, application-level tenant filtering plus PostgreSQL RLS, structured audit logging, Prometheus metrics, optional OpenTelemetry, migrations, CI and evaluation.
-
-See also:
-
-- `ARCHITECTURE.md`
-- `SECURITY.md`
-- `CONTROL_MAPPING.md`
-- `INTERVIEW_QA.md`
+**Scope:** A security-focused reference implementation, not a guarantee of regulatory compliance or immunity to prompt injection. See `SECURITY.md` and `CONTROL_MAPPING.md`.
